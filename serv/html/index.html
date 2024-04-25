@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="serv/css/style.css">
+    <title>Groupie</title>
+</head>
+<body>
+    <h1>Groupie</h1>
+    <div class="filter">
+        <form action="/" method="post">
+            <select name="sorting">
+                <option value="">Sort by</option>
+                <option value="creation">Creation</option>
+                <option value="album">Album</option>
+                <option value="member">Member</option>
+              </select>
+              <input type="submit" value="Search for">
+        </form>
+    </div>
+    <div class="container">
+        {{ range .Artists }}
+            <div class="artist">
+                <h3>{{ .Name }}</h3>
+                <img src="{{ .Image }}" alt="">
+            </div>
+        {{ end }}
+    </div>
+</body>
+</html>
