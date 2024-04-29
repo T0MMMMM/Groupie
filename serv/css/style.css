@@ -6,37 +6,59 @@
   font-family: rubik-bold;
   src: url(../assets/fonts/Rubik/Rubik-Bold.ttf);
 }
-
-
-html {
-    padding: 15px;
+@font-face {
+    font-family: satoshi;
+    src: url(../assets/fonts/Satoshi/Satoshi-Variable.ttf);
+}
+@font-face {
+    font-family: bosch;
+    src: url(../assets/fonts/Bosch/Bosch.otf);
 }
 
 * {
+    margin: 0;
+    padding: 0;
     font-size: 30px;
-    font-family: "rubik";
+    font-weight: 900;
 }
 
-body {
+header {
+    width: 100vw;
+    height: 100vh;
+    background-image: url(../assets/images/landscape.jpg);
+    background-size: cover;
+}
+
+.navbar {
+    padding: 35px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    box-sizing: border-box;
+    padding-top: 40px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+.navbar .logo {
+    font-size: 35px;
+    font-weight: 900;
+    font-family: Verdana, sans-serif;
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
+    color: white;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.body {
+    background-color: rgb(25, 25, 25);
     overflow-x: hidden;
-    margin: 30px;
-}
-
-h1 {
-    margin: 25px;
-    margin-bottom: 100px;
-    color: rgba(47,28,106,255);
-    font-family: "rubik-bold";
-    font-size: 60px;
-    text-align: center;
-}
-
-h3 {
-    padding-bottom: 5px;
-    color: rgba(47,28,106,255);
-    font-family: "rubik-bold";
-    font-size: 25px;
-    text-align: center;
+    padding: 40px;
 }
 
 .artist {
@@ -46,17 +68,174 @@ h3 {
     grid-column: auto;
 }
 
+.artist-name {
+    font-size: 20px;
+    font-family: bosch;
+    text-align: center;
+    padding-bottom: 20px;
+    color: white;
+}
+
 .container {
     display: grid;
     grid-gap: 120px;
     grid-column-end: 5;
     grid-template-columns: repeat(5, 1fr);
     grid-auto-columns: auto;
+    background-color: rgb(25, 25, 25);
+}
+
+.container img {
+    border-radius: 3px;
+}
+
+.container a {
+    text-decoration: none;
 }
 
 .filter {
-    width: auto;
-    padding: 30px;
     display: flex;
-    background-color: rgb(255, 214, 184);
+    flex-direction: column;
+    color: white;
+    font-family: satoshi;
+    background-color: rgb(25, 25, 25);
 }
+
+.filter div {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 35px 0px 35px 0px;
+    background-color: rgb(22, 22, 22);
+    width: 100%;
+    font-family: bosch;
+    vertical-align: middle;
+}
+
+.close-filter {
+    cursor: pointer;
+    background-color: rgb(22, 22, 22);
+    width: 100%;
+}
+
+.open-filter {
+    cursor: pointer;
+    background-color: rgb(22, 22, 22);
+    width: 100%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 35px 0px 35px 0px;
+}
+
+.open-filter span {
+    font-family: bosch;
+    font-size: 35px;
+}
+
+.none {
+    display: none;
+}
+
+.submit {
+    font-family: bosch;
+    font-size: 35px;
+    outline: none;
+    border: none;
+    color: white;
+    background-color: rgba(0, 0, 0, 0);
+    cursor: pointer;
+}
+
+select {
+    border: 1px solid rgba(red, green, blue, 100);
+    border-radius: 3px;
+    color: white;
+    padding: 5px 10px 5px 10px;
+    margin-left: 15px;
+    font-family: bosch;
+    background-color: rgba(0, 0, 0, 0);
+    outline: none;
+}
+
+input[type="range"] {
+    border: none;
+    outline: none;
+    text-decoration: none;
+    color: white;
+    vertical-align: middle;
+}
+
+input[type="radio"] {
+    font-size: 100px;
+    outline: 0px;
+    color: white;
+    background-color: red;
+    border: 1px solid #000;
+    border-radius: 3px;
+    text-align: center;
+    align-self: center;
+}
+
+input[type="radio"]::after {
+    font-size: 100px;
+    outline: 0px;
+    color: white;
+    background-color: red;
+    border: 1px solid #000;
+    border-radius: 3px;
+    text-align: center;
+    align-self: center;
+}
+
+#rangeValue {
+    vertical-align: middle;
+}
+
+
+
+.filter .member {
+    padding: 0px 10px 0px 10px;
+}
+
+.search {
+    border-radius: 3px;
+    font-size: 20px;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+}
+
+.search i {
+    color: rgb(25, 25, 25);
+    font-size: 25px;
+    text-align: center;
+    top: 50%;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.search-bar {
+    font-size: 25px;
+    color: rgb(25, 25, 25);
+    margin: 5px;
+    margin-right: 15px;
+    background-color: white;
+    font-family: bosch;
+    border: none;
+    outline: none;
+}
+
+.search-bar::placeholder {
+    color: rgb(25, 25, 25);
+    opacity: 1;
+}
+
+
+/* BAR DE RECHERCHE */
+
+
+
+/* BAR DE RECHERCHE */

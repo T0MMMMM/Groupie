@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 func (E *Engine) getAPI(link string) []byte {
@@ -46,13 +47,7 @@ func (E *Engine) sorting(parameter string) {
 				case "creation":
 					move = E.Artists[i].CreationDate > E.Artists[j].CreationDate
 				case "album":
-					date1, err1 := strconv.Atoi(E.Artists[i].FirstAlbum[6:])
-					date2, err2 := strconv.Atoi(E.Artists[j].FirstAlbum[6:])
-					if (err1 != nil || err2 != nil) {
-						fmt.Println("Error during conversion")
-						return
-					}
-					move = date1 > date2
+					move = E.atoi(E.Artists[i].FirstAlbum[6:]) > E.atoi(E.Artists[j].FirstAlbum[6:])
 				case "member":
 					move = len(E.Artists[i].Members) > len(E.Artists[j].Members)
 			}
@@ -63,5 +58,41 @@ func (E *Engine) sorting(parameter string) {
 	}
 }
 
+func (E *Engine) search(parameter string) {
+	var newList []artists
+	for i := 0; i < len(E.ArtistsList); i++ {
+		if (strings.Contains(strings.ToLower(E.ArtistsList[i].Name), strings.ToLower(parameter))) {
+			newList = append(newList, E.ArtistsList[i])
+		}
+	}
+	E.Artists = newList
+}
 
+func (E *Engine) filterNumberOfMember(parameter int) {
+	var newList []artists
+	for i := 0; i < len(E.Artists); i++ {
+		if (len(E.Artists[i].Members) == parameter) {
+			newList = append(newList, E.Artists[i])
+		}
+	}
+	E.Artists = newList
+}
 
+func (E *Engine) filterAlbumDate(parameter int) {
+	var newList []artists
+	for i := 0; i < len(E.Artists); i++ {
+		if (E.atoi(E.Artists[i].FirstAlbum[6:]) == parameter) {
+			newList = append(newList, E.Artists[i])
+		}
+	}
+	E.Artists = newList
+}
+
+func (E *Engine) atoi(str string) int {
+	s, err := strconv.Atoi(str)
+	if (err != nil) {
+		fmt.Println(err)
+		return 0
+	}
+	return s
+}

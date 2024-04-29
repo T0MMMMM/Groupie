@@ -8,8 +8,17 @@ import (
 )
 
 type Engine struct {
-	Port	string
-	Artists []artists
+	Port		string
+	Artists 	[]artists
+	ArtistsList []artists
+	Info		APIinfo
+}
+
+type APIinfo struct {
+	MaxAlbumDate int
+	MinAlbumDate int
+	MaxMemberNumber int
+	MaxMemberNumberList []int // List de nombre de la taille du nombre max de membres
 }
 
 type artists struct {
@@ -50,6 +59,27 @@ func (E *Engine) Init() {
 	E.Port = ":8080"
 
 	E.setArtists(E.getAPI("https://groupietrackers.herokuapp.com/api/artists"))
+
+	E.ArtistsList = E.Artists
+
+	E.Info.MinAlbumDate = E.atoi(E.Artists[0].FirstAlbum[6:])
+
+	for i := 0; i < len(E.Artists); i++ {
+		if E.Info.MinAlbumDate > E.atoi(E.Artists[i].FirstAlbum[6:]) {
+			E.Info.MinAlbumDate = E.atoi(E.Artists[i].FirstAlbum[6:])
+		}
+		if E.Info.MaxAlbumDate < E.atoi(E.Artists[i].FirstAlbum[6:]) {
+			E.Info.MaxAlbumDate = E.atoi(E.Artists[i].FirstAlbum[6:])
+		}
+		if E.Info.MaxMemberNumber < len(E.Artists[i].Members) {
+			E.Info.MaxMemberNumber = len(E.Artists[i].Members)
+		}
+	}
+
+	for i := 1; i < E.Info.MaxMemberNumber; i++ {
+		E.Info.MaxMemberNumberList = append(E.Info.MaxMemberNumberList, i)
+	}
+
 }
 
 
@@ -61,7 +91,7 @@ func (E *Engine) Run() {
 	http.Handle("/serv/", http.StripPrefix("/serv/", fs))
 
 	http.HandleFunc("/", E.index)
-	//http.HandleFunc("/hangman", E.Hangman)
+	http.HandleFunc("/artist", E.artist)
 
 	fmt.Println("(http://localhost:8080) - Serveur started on port", E.Port)
 

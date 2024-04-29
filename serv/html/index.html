@@ -4,28 +4,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="serv/css/style.css">
+    <script src="https://kit.fontawesome.com/ea8060e81f.js" crossorigin="anonymous"></script>
     <title>Groupie</title>
 </head>
 <body>
-    <h1>Groupie</h1>
-    <div class="filter">
+    <nav class="navbar">
         <form action="/" method="post">
-            <select name="sorting">
-                <option value="">Sort by</option>
-                <option value="creation">Creation</option>
-                <option value="album">Album</option>
-                <option value="member">Member</option>
-              </select>
-              <input type="submit" value="Search for">
+            <input class="logo" name="reload" type="submit" value="Groupie-Tracker">
+        </form>
+        
+        <div class="search">
+            <input type="search" class="search-bar" placeholder="Search for ..." id="search" >
+            <i class="fa-solid fa-magnifying-glass" onclick="search()"></i>
+        </div>
+        
+        <script type="text/javascript">
+            function search() {
+                window.location.href = window.location.href + "/?search=" + document.getElementById('search').value;
+            }
+        </script>
+        
+    </nav>
+    <header></header>
+
+    <div class="open-filter" onclick="openFilter()" id="open-filter">
+        <span>Filter&nbsp</span>
+        <i class="fa-solid fa-caret-down"></i>
+    </div>
+    <script type="text/javascript">
+        function openFilter() {
+            document.getElementById("filter").classList.remove("none");
+            document.getElementById("open-filter").classList.add("none");
+        }
+    </script>
+
+    <div class="filter none" id="filter">
+        <form action="/" method="post">
+
+            <div>
+                <span>Filters :</span>
+            </div>
+            
+
+            <div>
+                <span>First album date :&nbsp</span>
+                <input type="checkbox" name="album-date-filter" onclick="filterAlbumDate()" id="album-date-filter">
+                <input type="range" id="range-input" name="album-date" value="{{ .Info.MinAlbumDate }}" min="{{ .Info.MinAlbumDate }}" max="{{ .Info.MaxAlbumDate }}" step="1" onchange="rangeSlide(this.value)" onmousemove="rangeSlide(this.value)" disabled>
+                <span id="range-value">{{ .Info.MinAlbumDate }}&nbsp</span>
+                <script type="text/javascript">
+                    function rangeSlide(value) {
+                        document.getElementById('range-value').innerHTML = value;
+                    }
+                    function filterAlbumDate() {
+                        if (!document.getElementById('album-date-filter').checked) {
+                            document.getElementById('range-input').disabled = true;
+                        } else {
+                            document.getElementById('range-input').disabled = false;
+                        }
+                    }
+                </script>
+            </div>
+
+            <div>
+                <span>Number of Member : </span>
+                {{ range .Info.MaxMemberNumberList }}
+                <span class="member">
+                    <span>{{ . }}&nbsp</span>
+                    <input type="radio" value="{{ . }}" name="number-of-member" class="radio">
+                </span>
+                {{ end }} 
+            </div>
+            
+            <div>
+                <input type="submit" value="Fliter" class="submit">
+                <select name="sorting">
+                    <option value="">Sort by</option>
+                    <option value="creation">Creation</option>
+                    <option value="album">Album</option>
+                    <option value="member">Member</option>
+                </select>
+            </div>
+
+            <div class="close-filter" onclick="closeFilter()">
+                <span>Close Filter&nbsp</span>
+                <i class="fa-solid fa-caret-up"></i>
+            </div>
+
         </form>
     </div>
-    <div class="container">
-        {{ range .Artists }}
-            <div class="artist">
-                <h3>{{ .Name }}</h3>
-                <img src="{{ .Image }}" alt="">
-            </div>
-        {{ end }}
-    </div>
+    <script type="text/javascript">
+        function closeFilter() {
+            document.getElementById("open-filter").classList.remove("none");
+            document.getElementById("filter").classList.add("none");
+        }
+    </script>
+
+    <section class="body">
+        <div class="container">
+            {{ range .Artists }}
+            <a href="/artist?artist={{ .Name }}">
+                <div class="artist">
+                    <p class="artist-name">{{ .Name }}</p>
+                    <img src="{{ .Image }}" alt="">
+                </div>
+            </a>
+            {{ end }}
+        </div>
+    </section>
+    
 </body>
 </html>
