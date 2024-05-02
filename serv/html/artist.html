@@ -1,13 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="serv/css/style.css">
-    <title>{{ .Name }}</title>
+    <title>Citrus</title>
 </head>
+
 <body>
-    <img src="{{ .Image }}" alt="">
-    <h1>{{ .Name }}</h1>
-    <p>{{ .ConcertDates.Dates }}</p>
+    <div class="all">
+        <header class="main-head">
+            <nav>
+                <div class="left">
+                    <p class="title">
+                        Page des artistes
+                    </p>
+                </div>
+                <ul>
+                    <li><a href="/main2">Accueil</a></li>
+                </ul>
+            </nav>
+        </header>
+        <div class="info">
+            <div class="second">
+                <img src={{.Image}} class="Icon" />
+                <div class="forms">
+                    <form class="forms">
+                        <label for="name">Nom du groupe : {{.Name}}</label>
+                        <label for="creation">Date de Création : {{.CreationDate}}</label>
+                        <label for="member">Membre du groupe : 
+                    <div class="member">
+                        {{range .Members}}
+                            <ul>
+                                <li>{{.}} </li> 
+                            </ul>
+                            {{end}} </label>
+                </div>
+                <label for="album">Date du 1er Album : {{.FirstAlbum}}</label>
+                </form>
+            </div>
+        </div>
+        <div class="right">
+            <div class=t ext>
+                <p>Lieux & Dates de Concert : </p>
+                <li><a href="/map">Map</a></li>
+            </div>
+            <ol>
+                {{range $k, $v := .Relations}} {{end}}
+            </ol>
+        </div>
+    </div>
 </body>
+
+</html>
+
+</html>
