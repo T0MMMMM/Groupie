@@ -88,6 +88,29 @@ func (E *Engine) filterAlbumDate(parameter int) {
 	E.Artists = newList
 }
 
+func (E *Engine) filterCreationDate(parameter int) {
+	var newList []artists
+	for i := 0; i < len(E.Artists); i++ {
+		if (E.Artists[i].CreationDate == parameter) {
+			newList = append(newList, E.Artists[i])
+		}
+	}
+	E.Artists = newList
+}
+
+func (E *Engine) filterConcertLocation(parameter string) {
+	var newList []artists
+	for i := 0; i < len(E.Artists); i++ {
+		for j := 0; j < len(E.Artists[i].Locations.Country); j++ {
+			if (E.Artists[i].Locations.Country[j] == parameter) {
+				newList = append(newList, E.Artists[i])
+				break;
+			}
+		}
+	}
+	E.Artists = newList
+}
+
 func (E *Engine) atoi(str string) int {
 	s, err := strconv.Atoi(str)
 	if (err != nil) {
@@ -95,4 +118,20 @@ func (E *Engine) atoi(str string) int {
 		return 0
 	}
 	return s
+}
+
+func removeDuplicateValues(intSlice []string) []string {
+    keys := make(map[string]bool)
+    list := []string{}
+ 
+    // If the key(values of the slice) is not equal
+    // to the already present value in new slice (list)
+    // then we append it. else we jump on another element.
+    for _, entry := range intSlice {
+        if _, value := keys[entry]; !value {
+            keys[entry] = true
+            list = append(list, entry)
+        }
+    }
+    return list
 }

@@ -4,7 +4,8 @@ import (
 	"fmt"
 	// "math/rand"
 	"net/http"
-	// "time"
+	"strings"
+	"sort"
 )
 
 type Engine struct {
@@ -19,6 +20,10 @@ type APIinfo struct {
 	MinAlbumDate int
 	MaxMemberNumber int
 	MaxMemberNumberList []int // List de nombre de la taille du nombre max de membres
+	MaxCreationDate int
+	MinCreationDate int
+	ConcertLocations []string
+	Country string
 }
 
 type artists struct {
@@ -40,6 +45,8 @@ type locations struct {
 	Id			int				`json:"id"`
 	Locations	[]string		`json:"locations"`
 	Dates		string			`json:"dates"`
+	Country []string
+	ConcertCityLocations []string
 }
 
 type dates struct {
@@ -63,6 +70,7 @@ func (E *Engine) Init() {
 	E.ArtistsList = E.Artists
 
 	E.Info.MinAlbumDate = E.atoi(E.Artists[0].FirstAlbum[6:])
+	E.Info.MinCreationDate = E.Artists[0].CreationDate
 
 	for i := 0; i < len(E.Artists); i++ {
 		if E.Info.MinAlbumDate > E.atoi(E.Artists[i].FirstAlbum[6:]) {
@@ -74,11 +82,26 @@ func (E *Engine) Init() {
 		if E.Info.MaxMemberNumber < len(E.Artists[i].Members) {
 			E.Info.MaxMemberNumber = len(E.Artists[i].Members)
 		}
+		if E.Info.MinCreationDate > E.Artists[i].CreationDate {
+			E.Info.MinCreationDate = E.Artists[i].CreationDate
+		}
+		if E.Info.MaxCreationDate < E.Artists[i].CreationDate {
+			E.Info.MaxCreationDate = E.Artists[i].CreationDate
+		}
+		for j := 0; j < len(E.Artists[i].Locations.Locations); j++ {
+			E.Info.ConcertLocations = append(E.Info.ConcertLocations, strings.Title(strings.ReplaceAll(strings.Split(E.Artists[i].Locations.Locations[j], "-")[1], "_", " ")))
+			E.Artists[i].Locations.Country = append(E.Artists[i].Locations.Country, strings.Title(strings.ReplaceAll(strings.Split(E.Artists[i].Locations.Locations[j], "-")[1], "_", " ")))
+			E.Artists[i].Locations.ConcertCityLocations = append(E.Artists[i].Locations.ConcertCityLocations, strings.Split(E.Artists[i].Locations.Locations[j], "-")[0] ) 
+		} // LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 	}
 
-	for i := 1; i < E.Info.MaxMemberNumber; i++ {
+	for i := 1; i <= E.Info.MaxMemberNumber; i++ {
 		E.Info.MaxMemberNumberList = append(E.Info.MaxMemberNumberList, i)
 	}
+
+	E.Info.ConcertLocations = removeDuplicateValues(E.Info.ConcertLocations)
+
+	sort.Strings(E.Info.ConcertLocations)
 
 }
 

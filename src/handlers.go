@@ -12,6 +12,10 @@ func (E *Engine) index(w http.ResponseWriter, r *http.Request) {
 	numberOfMember := r.FormValue("number-of-member")
 	albumDate  := r.FormValue("album-date")
 	albumDateFilter := r.FormValue("album-date-filter")
+	creationDate := r.FormValue("album-date-creation")
+	creationDateFilter := r.FormValue("album-date-filter-creation")
+	concertLocation := r.FormValue("location-filter")
+
 
 	name := r.FormValue("search")
 	reload := r.FormValue("reload")
@@ -29,8 +33,17 @@ func (E *Engine) index(w http.ResponseWriter, r *http.Request) {
 	if albumDateFilter != "" {
 		E.filterAlbumDate(E.atoi(albumDate))
 	}
+	if creationDateFilter != "" {
+		E.filterCreationDate(E.atoi(creationDate))
+	}
+	if concertLocation != "" {
+		E.Info.Country = concertLocation
+		E.filterConcertLocation(concertLocation)
+	} else {
+		E.Info.Country = "";
+	}
 
-	if (reload != "" || (sorting == "" && numberOfMember == "" && name == "" && albumDate == "")) { // REMET LA LIST COMPLET DES ARTISTES
+	if (reload != "" || (sorting == "" && numberOfMember == "" && name == "" && albumDate == "" && creationDate == "" && concertLocation == "")) { // REMET LA LIST COMPLET DES ARTISTES
 		E.Artists = E.ArtistsList
 	}
 	

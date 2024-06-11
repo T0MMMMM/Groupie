@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="serv/css/style.css">
     <script src="https://kit.fontawesome.com/ea8060e81f.js" crossorigin="anonymous"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAM70X4aWVEis2qxQm4mX04q-RUTB29McM">
+    </script>
+    
     <title>Groupie</title>
 </head>
+
 <body>
     <nav class="navbar">
         <form action="/" method="post">
@@ -20,7 +24,7 @@
         
         <script type="text/javascript">
             function search() {
-                window.location.href = window.location.href + "/?search=" + document.getElementById('search').value;
+                window.location.href = "http://localhost:8080/?search=" + document.getElementById('search').value;
             }
         </script>
         
@@ -66,6 +70,25 @@
             </div>
 
             <div>
+                <span>Creation date :&nbsp</span>
+                <input type="checkbox" name="album-date-filter-creation" onclick="filterAlbumDate()" id="album-date-filter-creation">
+                <input type="range" id="range-input-creation" name="album-date-creation" value="{{ .Info.MinCreationDate }}" min="{{ .Info.MinCreationDate }}" max="{{ .Info.MaxCreationDate }}" step="1" onchange="rangeSlide(this.value)" onmousemove="rangeSlide(this.value)" disabled>
+                <span id="range-value-creation">{{ .Info.MinCreationDate }}&nbsp</span>
+                <script type="text/javascript">
+                    function rangeSlide(value) {
+                        document.getElementById('range-value-creation').innerHTML = value;
+                    }
+                    function filterAlbumDate() {
+                        if (!document.getElementById('album-date-filter-creation').checked) {
+                            document.getElementById('range-input-creation').disabled = true;
+                        } else {
+                            document.getElementById('range-input-creation').disabled = false;
+                        }
+                    }
+                </script>
+            </div>
+
+            <div>
                 <span>Number of Member : </span>
                 {{ range .Info.MaxMemberNumberList }}
                 <span class="member">
@@ -74,9 +97,19 @@
                 </span>
                 {{ end }} 
             </div>
-            
+
             <div>
+                <select name="location-filter">
+                    <option value="">Concert Location</option>
+                    {{ range .Info.ConcertLocations }}
+                        <option value="{{ . }}">{{ . }}</option>
+                    {{ end }}
+                </select>
+            </div>
+            
+            <div class="submit-filters">
                 <input type="submit" value="Fliter" class="submit">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
                 <select name="sorting">
                     <option value="">Sort by</option>
                     <option value="creation">Creation</option>
@@ -111,6 +144,31 @@
             {{ end }}
         </div>
     </section>
+
+    
+
+    {{ if ne .Info.Country "" }}
+
+        <div id="country" data-variable="{{ .Info.Country }}" ></div>
+
+        <div id="map"></div>
+
+        {{ range .Artists }}
+            <div class="js-variable" data-variable="{{ .Name }}:{{ .Locations.Locations }}" ></div>
+            <div id="{{ .Name }}" style="display: flex; justify-content: center; align-items: center;" hidden>
+                <img src="{{ .Image }}" alt="" style="height: 50px;width: 50px;margin-right: 15px;">
+                <span style="font-size: 25px;justify-content: center;">{{ .Name }}</span>
+            </div>
+        {{ end }}
+
+        <script src="serv/js/javascript.js"></script>
+
+    {{ end }}
+
+    <footer>
+        <small>&copy; 2024, Tom Fuster,  Jelko Mitroviche,  Raphaël Langoisco.  Tous droits réservés.</small>
+    </footer>
     
 </body>
+
 </html>

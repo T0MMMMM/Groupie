@@ -1,57 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="artist-page">
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="serv/css/style.css">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="https://kit.fontawesome.com/ea8060e81f.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Citrus</title>
+    <title>{{ .Name }}</title>
 </head>
 
+
+
 <body>
-    <div class="all">
-        <header class="main-head">
-            <nav>
-                <div class="left">
-                    <p class="title">
-                        Page des artistes
-                    </p>
-                </div>
-                <ul>
-                    <li><a href="/main2">Accueil</a></li>
-                </ul>
-            </nav>
-        </header>
-        <div class="info">
-            <div class="second">
-                <img src={{.Image}} class="Icon" />
-                <div class="forms">
-                    <form class="forms">
-                        <label for="name">Nom du groupe : {{.Name}}</label>
-                        <label for="creation">Date de Création : {{.CreationDate}}</label>
-                        <label for="member">Membre du groupe : 
-                    <div class="member">
-                        {{range .Members}}
-                            <ul>
-                                <li>{{.}} </li> 
-                            </ul>
-                            {{end}} </label>
-                </div>
-                <label for="album">Date du 1er Album : {{.FirstAlbum}}</label>
-                </form>
-            </div>
+
+    <nav class="navbar artist-nav">
+        <form action="/" method="post">
+            <input class="logo" name="reload" type="submit" value="Groupie-Tracker">
+        </form>
+        
+        <div class="search">
+            <input type="search" class="search-bar" placeholder="Search for ..." id="search" >
+            <i class="fa-solid fa-magnifying-glass" onclick="search()"></i>
         </div>
-        <div class="right">
-            <div class=t ext>
-                <p>Lieux & Dates de Concert : </p>
-                <li><a href="/map">Map</a></li>
-            </div>
-            <ol>
-                {{range $k, $v := .Relations}} {{end}}
-            </ol>
+        
+        <script type="text/javascript">
+            function search() {
+                window.location.href = "http://localhost:8080/?search=" + document.getElementById('search').value;
+            }
+        </script>
+        
+    </nav>
+
+    <div style="height: 120px;"></div>
+    
+
+    <section class="artist-info">
+        <div class="artist-info-top">
+            <img src="{{ .Image }}" alt="">
+            <span class="artist-name">{{ .Name }}</span>
         </div>
-    </div>
+
+        <div class="artist-info-bottom">
+            <span>Members :</span><br>
+            {{ range .Members }}
+                <span>{{ . }}</span>
+            {{ end }}
+            <br>
+
+            <span>Concerts Locations :</span><br>
+            {{ range .Locations.Locations }}
+                <span>{{ . }}</span>
+            {{ end }}
+            <br>
+
+            <span>Relations :</span><br>
+            {{ range .Relations.Relations }}
+                <span>{{ . }}</span>
+            {{ end }}
+            <br>
+
+        </div>
+
+    </section>
+    
+    
+
 </body>
 
 </html>
