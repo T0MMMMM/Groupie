@@ -17,7 +17,7 @@ for (let i = 0; i < jsVariable.length; i++) {
     cityList[i].push(jsVariable[i].getAttribute("data-variable").split(":")[0]);
     cityList[i].push(jsVariable[i].getAttribute("data-variable").split(":")[1].substring(1, jsVariable[i].getAttribute("data-variable").split(":")[1].length-1).split(" "));
     for (let j = 0; j < cityList[i][1].length; j++) {
-        if (capitalize(cityList[i][1][j].split("-")[1]) == requestCountry) {
+        if (capitalize(cityList[i][1][j].split("-")[1].replaceAll("_", " ")) == requestCountry) {
             cityList[i][1][j] = cityList[i][1][j].split("-")[0].replaceAll("_", " ") + ", " + capitalize(cityList[i][1][j].split("-")[1]);
             cityList[i][1][j] = capitalize(cityList[i][1][j]);
         } else {
@@ -53,68 +53,31 @@ async function initMap() {
         center: {lat: -34.397, lng: 150.644},
         zoom: 6,
         mapId: "1",
+        streetViewControl: false,
+        mapTypeControl: false,
     });
 
     geocodeAddress(requestCountry, function(error, location) {
         if (error) {
             console.error(error.message);
         } else {
+            alert(requestCountry);
             map.setCenter(location);
         }
     });
-
-    //geocode({ address: requestCountry });
-
-    //map.setCenter(geocode({ address: requestCountry }))
 }
 
-var markers = [];
 
-// function getMarker(pos) {
-//     return null;
-//     for (let i = 0; i < markers.length; i++) {
-//         if (markers[i].position) {
-//             return markers[i];
-//         }
-//     }
-//     return null;
-// }
+var markers = {};
 
-// Google Markers
-// async function initMarkers() {
-//     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-
-//     for (let i = 0; i < cityList.length; i++) {
-//         for (let j = 0; j < cityList[i][1].length; j++) {
-//             geocodeAddress(cityList, function(error, location) {
-//             if (error) {
-//                 console.error(error.message);
-//             } else {
-//                 var mak = getMarker();
-//                 if (mak != null ) {
-//                     mak.content.appendChild(document.getElementById(cityList[i][0]))
-//                 } else {
-//                     const content = document.createElement("div");
-//                     content.style.display = "flex";
-//                     content.style.flexDirection = "column"
-//                     content.style.justifyContent = "center";
-//                     content.appendChild(document.getElementById(cityList[i][0]));
-
-//                     const marker = new AdvancedMarkerElement({
-//                         position : location,
-//                         content : content,
-//                         map : map,
-//                     });
-
-//                     markers.push(marker);
-//                 }
-                
-//             }
-//             });
-//         }
-//     }
-
-// }
+function getMarker(pos) {
+    for (let i = 0; i < Object.keys(markers).length; i++) {
+        if (Object.keys(markers)[i] == pos) {
+            return markers[Object.keys(markers)[i]];
+        }
+    }
+    return null;
+}
 
 async function simpleMarker() {
     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
@@ -125,16 +88,48 @@ async function simpleMarker() {
                     console.error(error.message);
                 } else {
 
-                    const content = document.getElementById(cityList[i][0]).cloneNode(true);
-                    content.hidden = false
+                    var existantMarker = getMarker(cityList[i][1][j]);
+                    
+                    if (existantMarker != null) {
 
-                    const marker = new AdvancedMarkerElement({
-                        position : location,
-                        content : content,
-                        map : map,
-                    });
-            
-                    markers.push(marker);
+                        const div = existantMarker.content;
+                        const artist = document.getElementById(cityList[i][0]).cloneNode(true);
+                        artist.style.display = "flex";
+                        div.insertBefore(artist, div.children[0]);
+                        existantMarker.content = div;
+
+                    } else {
+
+                        const content = document.createElement("div");
+                        content.style.display = "flex";
+                        content.style.flexDirection = "column";
+                        content.style.justifyContent = "center";
+
+                        const artist = document.getElementById(cityList[i][0]).cloneNode(true);
+                        artist.style.display = "flex";
+
+                        const markerImg = document.createElement("img");
+                        markerImg.src = "serv/assets/images/marker.png";
+                        markerImg.style.justifyContent = "center";
+                        markerImg.style.alignItems = "center";
+                        markerImg.style.marginLeft = "auto";
+                        markerImg.style.marginRight = "auto";
+                        markerImg.height = "30";
+                        markerImg.width = "30";
+
+                        content.appendChild(markerImg);
+                        content.insertBefore(artist, content.children[0]);
+
+                        const marker = new AdvancedMarkerElement({
+                            position : location,
+                            content : content,
+                            map : map,
+                        });
+                
+                        markers[cityList[i][1][j]] = marker;
+
+                    }
+
                 }
             });
         }

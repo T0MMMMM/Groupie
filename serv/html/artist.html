@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script src="https://kit.fontawesome.com/ea8060e81f.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAM70X4aWVEis2qxQm4mX04q-RUTB29McM">
+    </script>
     <title>{{ .Name }}</title>
 </head>
 
@@ -54,16 +56,23 @@
             {{ end }}
             <br>
 
-            <span>Relations :</span><br>
-            {{ range .Relations.Relations }}
-                <span>{{ . }}</span>
-            {{ end }}
-            <br>
-
         </div>
 
+        <div id="map" ></div>
+
     </section>
-    
+
+    <div id="locs" data-variable="{{ .Locations.Locations }}"></div>
+    <div id="artist" style="display: none; justify-content: center; align-items: center;">
+        <img src="{{ .Image }}" alt="" style="height: 50px;width: 50px;margin-right: 15px;">
+        <span style="font-size: 25px;justify-content: center;color: black;">{{ .Name }}</span>
+    </div>
+
+    <script src="serv/js/MapArtist.js"></script>
+
+    <footer>
+        <small>&copy; 2024, Tom Fuster,  Jelko Mitroviche,  Raphaël Langoisco.  Tous droits réservés.</small>
+    </footer>
     
 
 </body>

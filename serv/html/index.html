@@ -154,14 +154,14 @@
         <div id="map"></div>
 
         {{ range .Artists }}
-            <div class="js-variable" data-variable="{{ .Name }}:{{ .Locations.Locations }}" ></div>
-            <div id="{{ .Name }}" style="display: flex; justify-content: center; align-items: center;" hidden>
-                <img src="{{ .Image }}" alt="" style="height: 50px;width: 50px;margin-right: 15px;">
-                <span style="font-size: 25px;justify-content: center;">{{ .Name }}</span>
+            <div class="js-variable" data-variable="{{ .Name }}:{{ .Locations.Locations }}"></div>
+            <div id="{{ .Name }}" style="display: none; justify-content: center; align-items: center;margin: 1px;">
+                <img src="{{ .Image }}" alt="" style="height: 30px;width: 30px;margin-right: 10px;border-radius: 3px;">
+                <span style="font-size: 15px;justify-content: center;">{{ .Name }}</span>
             </div>
         {{ end }}
 
-        <script src="serv/js/javascript.js"></script>
+        <script src="serv/js/MapIndex.js"></script>
 
     {{ end }}
 
